@@ -1,0 +1,23 @@
+<div class="connections-container">
+
+  <div class="categories">
+    @for (category of categories; track $index) {
+      @if (category.revealed) {
+        <div class="category">
+          {{category.label}}
+          {{category.words}}
+        </div>
+      }
+    }
+  </div>
+
+  <div class="word-grid">
+    @for (word of words; track $index) {
+      @if (!word.hidden) {
+        <button class="word" (click)="select(word)">{{word.label}}</button>
+      }
+    }
+  </div>
+
+  <button (click)="checkSelection()">Submit</button>
+</div>
