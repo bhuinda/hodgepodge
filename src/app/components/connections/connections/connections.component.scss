@@ -1,27 +1,79 @@
 @import "../../../../assets/variables.scss";
 
+.connections-container {
+  padding: 30px;
+}
+
 .category {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border-radius: 10px;
   padding: 20px;
-  background-color: $connections-gray;
-  border: 1px solid rgba(0, 0, 0, 0.8);
+  margin: 3px;
   font-size: 30px;
   font-weight: bold;
 }
 
-.word-grid {
-  display: grid;
-  grid-template-columns: auto auto auto auto;
+.cat1 {
+  background-color: $connections-yellow;
+  color: white;
 }
+
+.cat2 {
+  background-color: $connections-green;
+  color: white;
+}
+
+.cat3 {
+  background-color: $connections-blue;
+  color: white;
+}
+
+.cat4 {
+  background-color: $connections-purple;
+  color: white;
+}
+
+.word-grid {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .word {
-  background-color: $connections-gray;
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 20px;
+  all: unset; // remove button default styles
+  border-radius: 10px;
+  margin: 3px;
+  padding: 15px;
+  box-sizing: border-box;
+  background-color: $connections-lightgray;
   font-size: 30px;
   text-align: center;
+  flex-basis: calc(25% - 6px);
 }
+
 .word:hover {
+  cursor: pointer;
+}
+
+.selected {
+  background-color: $connections-gray;
+  color: white;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.button-container > button {
+  all: unset; // remove button default styles
+  margin: 3px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background-color: $connections-lightgray;
+  color: black;
+  font-size: 20px;
   cursor: pointer;
 }

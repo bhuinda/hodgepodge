@@ -1,11 +1,12 @@
 <div class="connections-container">
 
   <div class="categories">
-    @for (category of categories; track $index) {
+    @for (category of categories; track category.id) {
       @if (category.revealed) {
-        <div class="category">
+        <div class="category" [ngClass]="'cat' + (category.id)">
           {{category.label}}
-          {{category.words}}
+          <br>
+          {{category.words.join(' ')}}
         </div>
       }
     }
@@ -13,11 +14,16 @@
 
   <div class="word-grid">
     @for (word of words; track $index) {
-      @if (!word.hidden) {
-        <button class="word" (click)="select(word)">{{word.label}}</button>
-      }
+      <button class="word" [ngClass]="{'selected': word.selected}" (click)="select(word)">
+        {{word.label}}
+      </button>
     }
   </div>
 
-  <button (click)="checkSelection()">Submit</button>
+  <div class="button-container">
+    <button (click)="shuffle()">Shuffle</button>
+    <button (click)="deselectAll()">Deselect all</button>
+    <button (click)="submit()">Submit</button>
+  </div>
+
 </div>
