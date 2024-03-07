@@ -10,8 +10,7 @@ type Word = {
 type Category = {
   id: number,
   label: string,
-  words: string[],
-  revealed: boolean
+  words: string[]
 }
 
 @Component({
@@ -29,35 +28,36 @@ export class ConnectionsComponent implements OnInit {
   */
   selection: Word[] = []
   words: Word[] = []
-  categories: Category[] = [
-    {
-      id: 1,
-      label: 'FORMATS FOR MOVING IMAGES',
-      words: ['AVI', 'DVD', 'FILM', 'GIF'],
-      revealed: false
-    },
-    {
-      id: 2,
-      label: 'ONOMATOPOEIC MUSIC GENRES',
-      words: ['BEBOP', 'DJENT', 'POP', 'SNAP'],
-      revealed: false
-    },
-    {
-      id: 3,
-      label: 'ENERGY',
-      words: ['ELAN', 'FIRE', 'VIM', 'ZIP'],
-      revealed: false
-    },
-    {
-      id: 4,
-      label: 'WORDS THAT REMAIN VALID WHEN THE FIRST LETTER SHIFTS TO END',
-      words: ['EON', 'RANGE', 'SMACK', 'TRAP'],
-      revealed: false
-    }
-  ]
+  game: { categories: Category[] } = {
+    categories: [
+      {
+        id: 1,
+        label: 'FORMATS FOR MOVING IMAGES',
+        words: ['AVI', 'DVD', 'FILM', 'GIF'],
+      },
+      {
+        id: 2,
+        label: 'ONOMATOPOEIC MUSIC GENRES',
+        words: ['BEBOP', 'DJENT', 'POP', 'SNAP'],
+      },
+      {
+        id: 3,
+        label: 'ENERGY',
+        words: ['ELAN', 'FIRE', 'VIM', 'ZIP'],
+      },
+      {
+        id: 4,
+        label: 'WORDS THAT REMAIN VALID WHEN THE FIRST LETTER SHIFTS TO END',
+        words: ['EON', 'RANGE', 'SMACK', 'TRAP'],
+      }
+    ]
+  }
+
+  categories: Category[] = [];
+
 
   initBoard(): void {
-    this.words = this.categories.flatMap(category =>
+    this.words = this.game.categories.flatMap(category =>
       category.words.map(word => ({
         label: word,
         category: category.label,
@@ -111,8 +111,8 @@ export class ConnectionsComponent implements OnInit {
 
     else if (correctCount == 4) {
       // Reveal category
-      const selectedCategory = this.categories.find(c => c.label == category);
-      selectedCategory.revealed = true;
+      const revealedCategory = this.game.categories.find(c => c.label == category);
+      this.categories.push(revealedCategory);
 
       // Hide selected words
       this.words = this.words.filter(word => !word.selected);

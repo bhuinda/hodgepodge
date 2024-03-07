@@ -2,13 +2,11 @@
 
   <div class="categories">
     @for (category of categories; track category.id) {
-      @if (category.revealed) {
-        <div class="category" [ngClass]="'cat' + (category.id)">
-          {{category.label}}
-          <br>
-          {{category.words.join(' ')}}
-        </div>
-      }
+      <div class="category" [ngClass]="'cat' + (category.id)">
+        {{category.label}}
+        <br>
+        {{category.words.join(' ')}}
+      </div>
     }
   </div>
 
