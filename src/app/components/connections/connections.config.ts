@@ -10,7 +10,15 @@ export type Category = {
   words: string[]
 }
 
-export const Connections = {
+export type Board = {
+  title: string;
+  description: string;
+  difficulty: string;
+  author: string;
+  categories: Category[];
+};
+
+export const Connections: { [id: number]: Board } = {
   1: {
     title: 'This is a trap!',
     description: 'A challenge for the bravest.',

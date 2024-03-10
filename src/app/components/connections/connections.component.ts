@@ -1,6 +1,6 @@
 import { NgClass } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { Word, Category, Connections } from './connections.config';
+import { Component, Input, OnInit } from '@angular/core';
+import { Word, Category, Board, Connections } from './connections.config';
 
 @Component({
   selector: 'connections',
@@ -11,10 +11,12 @@ import { Word, Category, Connections } from './connections.config';
 })
 export class ConnectionsComponent implements OnInit {
   /* TO-DO:
-     - refactor Connections boards into JSONs
-     - add localStorage support
-     - reactive styling
+    - refactor Connections boards into JSONs
+    - add localStorage support
+    - reactive styling
   */
+  @Input() gameId: number;
+
   selection: Word[] = [];
   submissionHistory: Word[][] = [];
   submissionMistakesLeft: number = 4;
@@ -23,13 +25,14 @@ export class ConnectionsComponent implements OnInit {
   errorTimeout: any = null;
   showError: boolean = false;
 
+  game: Board;
   gameOver: boolean = false;
-  game: typeof Connections[1];
 
   words: Word[] = [];
   categories: Category[] = [];
 
   initBoard(): void {
+    this.game = Connections[this.gameId];
     this.words = this.game.categories.flatMap(category =>
       category.words.map(word => ({
         label: word,
