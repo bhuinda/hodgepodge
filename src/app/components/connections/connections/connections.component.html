@@ -1,4 +1,11 @@
 <div class="connections-container">
+@if (gameOver) {
+  <div class="game-over">
+    You suck! Game over!
+  </div>
+}
+
+@if (!gameOver) {
 
   @if (showError) {
     <div class="error">
@@ -30,4 +37,5 @@
     <button (click)="submit()">Submit</button>
   </div>
 
+}
 </div>

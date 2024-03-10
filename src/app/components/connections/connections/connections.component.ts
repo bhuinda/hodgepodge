@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 type Word = {
   label: string,
@@ -14,7 +14,7 @@ type Category = {
 }
 
 @Component({
-  selector: 'app-connections',
+  selector: 'connections',
   standalone: true,
   imports: [NgClass],
   templateUrl: './connections.component.html',
@@ -27,12 +27,14 @@ export class ConnectionsComponent implements OnInit {
      - reactive styling
   */
   selection: Word[] = [];
-  selectionHistory: Word[][] = [];
+  submissionHistory: Word[][] = [];
+  submissionMistakesLeft: number = 4;
 
   error: string = '';
   errorTimeout: any = null;
   showError: boolean = false;
 
+  gameOver: boolean = false;
   game: { categories: Category[] } = {
     categories: [
       {
@@ -101,7 +103,7 @@ export class ConnectionsComponent implements OnInit {
     if (this.selection.length < 4) return;
 
     // Check if the submitted selection matches any of the previous submissions
-    for (const submission of this.selectionHistory) {
+    for (const submission of this.submissionHistory) {
       if (this.selection.every((value, index) => value == submission[index])) {
         this.errorPopup("You've already submitted this selection...");
         return;
@@ -109,34 +111,32 @@ export class ConnectionsComponent implements OnInit {
     }
 
     // Push submitted selection to submission history
-    this.selectionHistory.push([...this.selection]);
+    this.submissionHistory.push([...this.selection]);
 
     // Establish category to compare against
     const category = this.selection[0].category;
 
     let correctCount = 0;
-    for (const word of this.selection) {
-      if (word.category == category) {
-        correctCount++;
-      }
-    }
+    for (const word of this.selection) if (word.category == category) correctCount++;
 
-    if (correctCount == 3) {
-      this.errorPopup("One word away...");
+    if (correctCount < 4) {
+      this.submissionMistakesLeft--;
+
+      if (this.submissionMistakesLeft == 0) this.gameOver = true;
+      else if (correctCount == 3) this.errorPopup("One word away...");
+
       return;
     }
 
-    else if (correctCount == 4) {
-      // Reveal category
-      const revealedCategory = this.game.categories.find(c => c.label == category);
-      this.categories.push(revealedCategory);
+    // Reveal category
+    const revealedCategory = this.game.categories.find(c => c.label == category);
+    this.categories.push(revealedCategory);
 
-      // Hide selected words
-      this.words = this.words.filter(word => !word.selected);
+    // Hide selected words
+    this.words = this.words.filter(word => !word.selected);
 
-      // Reset selection
-      this.selection = [];
-    }
+    // Reset selection
+    this.selection = [];
   }
 
   errorPopup(error: string): void {
