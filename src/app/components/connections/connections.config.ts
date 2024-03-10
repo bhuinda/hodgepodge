@@ -16,9 +16,12 @@ export type Board = {
   difficulty: string;
   author: string;
   categories: Category[];
+  wordOrder: number[];
 };
 
-export const Connections: { [id: number]: Board } = {
+const defaultWordOrder = [12, 6, 3, 14, 5, 1, 0, 8, 10, 9, 7, 15, 11, 4, 2, 13];
+
+export const Boards: { [id: number]: Board } = {
   1: {
     title: 'This is a trap!',
     description: 'A challenge for the bravest.',
@@ -46,6 +49,7 @@ export const Connections: { [id: number]: Board } = {
         words: ['EON', 'RANGE', 'SMACK', 'TRAP'],
       }
     ],
+    wordOrder: defaultWordOrder,
   },
   2: {
     title: '',
@@ -74,6 +78,7 @@ export const Connections: { [id: number]: Board } = {
         words: [],
       }
     ],
+    wordOrder: defaultWordOrder,
   },
   3: {
     title: '',
@@ -102,6 +107,7 @@ export const Connections: { [id: number]: Board } = {
         words: [],
       }
     ],
+    wordOrder: defaultWordOrder,
   }
 };
 

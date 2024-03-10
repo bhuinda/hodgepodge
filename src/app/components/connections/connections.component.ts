@@ -1,6 +1,6 @@
 import { NgClass } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { Word, Category, Board, Connections } from './connections.config';
+import { Word, Category, Board, Boards } from './connections.config';
 
 @Component({
   selector: 'connections',
@@ -32,7 +32,7 @@ export class ConnectionsComponent implements OnInit {
   categories: Category[] = [];
 
   initBoard(): void {
-    this.game = Connections[this.gameId];
+    this.game = Boards[this.gameId];
     this.words = this.game.categories.flatMap(category =>
       category.words.map(word => ({
         label: word,
@@ -40,6 +40,12 @@ export class ConnectionsComponent implements OnInit {
         selected: false,
       }))
     );
+    this.orderWords();
+  }
+
+  orderWords(): void {
+    const wordOrder = Boards[this.gameId].wordOrder;
+    this.words = wordOrder.map(index => this.words[index]);
   }
 
   select(word: Word): void {
