@@ -26,8 +26,10 @@ export class ConnectionsComponent implements OnInit {
      - add localStorage support
      - reactive styling
   */
-  selection: Word[] = []
-  words: Word[] = []
+  selection: Word[] = [];
+  submissionHistory: Word[][] = [];
+  alreadySubmittedError: boolean = false;
+  words: Word[] = [];
   game: { categories: Category[] } = {
     categories: [
       {
@@ -51,7 +53,7 @@ export class ConnectionsComponent implements OnInit {
         words: ['EON', 'RANGE', 'SMACK', 'TRAP'],
       }
     ]
-  }
+  };
 
   categories: Category[] = [];
 
@@ -93,6 +95,18 @@ export class ConnectionsComponent implements OnInit {
   }
 
   submit(): void {
+    // Check if the submitted selection matches any of the previous submissions
+    for (const previousSubmission of this.submissionHistory) {
+      if (this.selection.length == previousSubmission.length &&
+          this.selection.every((value, index) => value == previousSubmission[index])) {
+        this.alreadySubmittedError = true;
+        return;
+      }
+    }
+
+    // Push submitted selection to submission history
+    this.submissionHistory.push([...this.selection]);
+
     if (this.selection.length < 4) return;
 
     // Establish category to compare against

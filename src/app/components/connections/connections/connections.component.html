@@ -1,5 +1,11 @@
 <div class="connections-container">
 
+  @if (alreadySubmittedError) {
+    <div class="error">
+      <p>Selection already submitted. Try something else.</p>
+    </div>
+  }
+
   <div class="categories">
     @for (category of categories; track category.id) {
       <div class="category" [ngClass]="'cat' + (category.id)">
