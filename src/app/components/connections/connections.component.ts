@@ -1,17 +1,6 @@
 import { NgClass } from '@angular/common';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-
-type Word = {
-  label: string,
-  category: string,
-  selected: boolean,
-}
-
-type Category = {
-  id: number,
-  label: string,
-  words: string[]
-}
+import { Component, OnInit } from '@angular/core';
+import { Word, Category, Connections } from './connections.config';
 
 @Component({
   selector: 'connections',
@@ -22,7 +11,7 @@ type Category = {
 })
 export class ConnectionsComponent implements OnInit {
   /* TO-DO:
-     - dynamically import categories
+     - refactor Connections boards into JSONs
      - add localStorage support
      - reactive styling
   */
@@ -35,30 +24,7 @@ export class ConnectionsComponent implements OnInit {
   showError: boolean = false;
 
   gameOver: boolean = false;
-  game: { categories: Category[] } = {
-    categories: [
-      {
-        id: 1,
-        label: 'FORMATS FOR MOVING IMAGES',
-        words: ['AVI', 'DVD', 'FILM', 'GIF'],
-      },
-      {
-        id: 2,
-        label: 'ONOMATOPOEIC MUSIC GENRES',
-        words: ['BEBOP', 'DJENT', 'POP', 'SNAP'],
-      },
-      {
-        id: 3,
-        label: 'ENERGY',
-        words: ['ELAN', 'FIRE', 'VIM', 'ZIP'],
-      },
-      {
-        id: 4,
-        label: 'WORDS THAT REMAIN VALID WHEN THE FIRST LETTER SHIFTS TO END',
-        words: ['EON', 'RANGE', 'SMACK', 'TRAP'],
-      }
-    ]
-  };
+  game: typeof Connections[1];
 
   words: Word[] = [];
   categories: Category[] = [];
