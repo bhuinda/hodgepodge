@@ -27,9 +27,12 @@ export class ConnectionsComponent implements OnInit {
      - reactive styling
   */
   selection: Word[] = [];
-  submissionHistory: Word[][] = [];
-  alreadySubmittedError: boolean = false;
-  words: Word[] = [];
+  selectionHistory: Word[][] = [];
+
+  error: string = '';
+  errorTimeout: any = null;
+  showError: boolean = false;
+
   game: { categories: Category[] } = {
     categories: [
       {
@@ -55,8 +58,8 @@ export class ConnectionsComponent implements OnInit {
     ]
   };
 
+  words: Word[] = [];
   categories: Category[] = [];
-
 
   initBoard(): void {
     this.words = this.game.categories.flatMap(category =>
@@ -95,22 +98,21 @@ export class ConnectionsComponent implements OnInit {
   }
 
   submit(): void {
+    if (this.selection.length < 4) return;
+
     // Check if the submitted selection matches any of the previous submissions
-    for (const previousSubmission of this.submissionHistory) {
-      if (this.selection.length == previousSubmission.length &&
-          this.selection.every((value, index) => value == previousSubmission[index])) {
-        this.alreadySubmittedError = true;
+    for (const submission of this.selectionHistory) {
+      if (this.selection.every((value, index) => value == submission[index])) {
+        this.errorPopup("You've already submitted this selection...");
         return;
       }
     }
 
     // Push submitted selection to submission history
-    this.submissionHistory.push([...this.selection]);
-
-    if (this.selection.length < 4) return;
+    this.selectionHistory.push([...this.selection]);
 
     // Establish category to compare against
-    const category = this.selection[0].category
+    const category = this.selection[0].category;
 
     let correctCount = 0;
     for (const word of this.selection) {
@@ -120,7 +122,8 @@ export class ConnectionsComponent implements OnInit {
     }
 
     if (correctCount == 3) {
-      // Reveal "only one away..."
+      this.errorPopup("One word away...");
+      return;
     }
 
     else if (correctCount == 4) {
@@ -132,8 +135,20 @@ export class ConnectionsComponent implements OnInit {
       this.words = this.words.filter(word => !word.selected);
 
       // Reset selection
-      this.selection = []
+      this.selection = [];
     }
+  }
+
+  errorPopup(error: string): void {
+    this.error = error;
+
+    if (this.showError) clearTimeout(this.errorTimeout);
+    else this.showError = true;
+
+    this.errorTimeout = setTimeout(() => {
+      this.showError = false;
+      this.error = '';
+    }, 3000);
   }
 
   ngOnInit(): void {

@@ -1,8 +1,8 @@
 <div class="connections-container">
 
-  @if (alreadySubmittedError) {
+  @if (showError) {
     <div class="error">
-      <p>Selection already submitted. Try something else.</p>
+      {{error}}
     </div>
   }
 
