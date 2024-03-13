@@ -1,7 +1,13 @@
 @import "../../../assets/variables.scss";
 
+$padding-size: 30px;
+$margin-size: 3px;
+$font-size-large: 30px;
+$font-size-medium: 20px;
+$border-radius-size: 10px;
+
 .connections-container {
-  padding: 30px;
+  padding: $padding-size;
 }
 
 .error-container {
@@ -9,14 +15,24 @@
 }
 
 .category {
-  display: flex;
+  text-align: center;
   justify-content: space-between;
   align-items: center;
-  border-radius: 10px;
-  padding: 20px;
-  margin: 3px;
-  font-size: 30px;
+  border-radius: $border-radius-size;
+  padding: $padding-size;
+  margin: $margin-size;
+  font-size: $font-size-large;
   font-weight: bold;
+
+  @media (max-width: 800px) {
+    font-size: $font-size-medium;
+    padding: calc($padding-size / 2);
+  }
+
+  @media (max-width: 500px) {
+    font-size: calc($font-size-medium / 1.5);
+    padding: calc($padding-size / 3);
+  }
 }
 
 .cat1 {
@@ -40,24 +56,35 @@
 }
 
 .word-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $margin-size;
 }
 
 .word {
   all: unset; // remove button default styles
-  border-radius: 10px;
-  margin: 3px;
-  padding: 15px;
+  border-radius: $border-radius-size;
+  padding: $padding-size;
   box-sizing: border-box;
   background-color: $connections-lightgray;
-  font-size: 30px;
+  font-size: $font-size-large;
   text-align: center;
-  flex-basis: calc(25% - 6px);
-}
 
-.word:hover {
-  cursor: pointer;
+  @media (max-width: 800px) {
+    font-size: $font-size-medium;
+    padding: calc($padding-size / 2);
+  }
+
+  @media (max-width: 500px) {
+    font-size: calc($font-size-medium / 1.5);
+    padding: calc($padding-size / 3);
+  }
+
+  &:hover {
+    cursor: pointer;
+    animation: shake 0.75s;
+    animation-iteration-count: infinite;
+  }
 }
 
 .selected {
@@ -73,16 +100,40 @@
 .button-container {
   display: flex;
   justify-content: center;
-  padding: 20px;
+  padding: $padding-size;
 }
 
 .button-container > button {
   all: unset; // remove button default styles
-  margin: 3px;
+  margin: $margin-size;
   padding: 10px 20px;
-  border-radius: 10px;
+  border-radius: $border-radius-size;
   background-color: $connections-lightgray;
   color: black;
-  font-size: 20px;
+  font-size: $font-size-medium;
   cursor: pointer;
+
+  @media (max-width: 800px) {
+    font-size: $font-size-medium;
+    padding: calc($padding-size / 2);
+  }
+
+  @media (max-width: 500px) {
+    font-size: calc($font-size-medium / 1.5);
+    padding: calc($padding-size / 3);
+  }
+}
+
+@keyframes shake {
+  0% { transform: translate(0.5px, 0.5px) rotate(0deg); }
+  10% { transform: translate(-0.5px, -1px) rotate(-0.5deg); }
+  20% { transform: translate(-1.5px, 0px) rotate(0.5deg); }
+  30% { transform: translate(1.5px, 1px) rotate(0deg); }
+  40% { transform: translate(0.5px, -0.5px) rotate(0.5deg); }
+  50% { transform: translate(-0.5px, 1px) rotate(-0.5deg); }
+  60% { transform: translate(-1.5px, 0.5px) rotate(0deg); }
+  70% { transform: translate(1.5px, 0.5px) rotate(-0.5deg); }
+  80% { transform: translate(-0.5px, -0.5px) rotate(0.5deg); }
+  90% { transform: translate(0.5px, 1px) rotate(0deg); }
+  100% { transform: translate(0.5px, -1px) rotate(-0.5deg); }
 }

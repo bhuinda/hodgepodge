@@ -23,17 +23,18 @@ export class ConnectionsComponent implements OnInit {
 
   error: string = '';
   errorTimeout: any = null;
+  errorTimeoutLength: number = 3000;
   showError: boolean = false;
 
-  game: Board;
+  board: Board;
   gameOver: boolean = false;
 
   words: Word[] = [];
   categories: Category[] = [];
 
   initBoard(): void {
-    this.game = Boards[this.gameId];
-    this.words = this.game.categories.flatMap(category =>
+    this.board = Boards[this.gameId];
+    this.words = this.board.categories.flatMap(category =>
       category.words.map(word => ({
         label: word,
         category: category.label,
@@ -104,7 +105,7 @@ export class ConnectionsComponent implements OnInit {
     }
 
     // Reveal category
-    const revealedCategory = this.game.categories.find(c => c.label == category);
+    const revealedCategory = this.board.categories.find(c => c.label == category);
     this.categories.push(revealedCategory);
 
     // Hide selected words
@@ -123,7 +124,7 @@ export class ConnectionsComponent implements OnInit {
     this.errorTimeout = setTimeout(() => {
       this.showError = false;
       this.error = '';
-    }, 3000);
+    }, this.errorTimeoutLength);
   }
 
   ngOnInit(): void {
