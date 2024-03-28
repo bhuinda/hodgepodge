@@ -15,20 +15,20 @@ export class ConnectionsComponent implements OnInit {
     - add localStorage support
     - reactive styling
   */
-  @Input() gameId: number;
 
-  selection: Word[] = [];
+  @Input() gameId: number;
+  gameOver: boolean = false;
+
+  submissionSelection: Word[] = [];
   submissionHistory: Word[][] = [];
   submissionMistakesLeft: number = 4;
 
   error: string = '';
   errorTimeout: any = null;
   errorTimeoutLength: number = 3000;
-  showError: boolean = false;
+  errorIsEnabled: boolean = false;
 
   board: Board;
-  gameOver: boolean = false;
-
   words: Word[] = [];
   categories: Category[] = [];
 
@@ -41,11 +41,12 @@ export class ConnectionsComponent implements OnInit {
         selected: false,
       }))
     );
+
     this.orderWords();
   }
 
   orderWords(): void {
-    const wordOrder = Boards[this.gameId].wordOrder;
+    const wordOrder = this.board.wordOrder;
     this.words = wordOrder.map(index => this.words[index]);
   }
 
@@ -53,13 +54,13 @@ export class ConnectionsComponent implements OnInit {
     // If word is already selected, deselect it and remove it from the selection
     if (word.selected) {
       word.selected = false;
-      this.selection = this.selection.filter(w => w != word);
+      this.submissionSelection = this.submissionSelection.filter(w => w != word);
     }
 
     // If selection isn't full, add word to selection; else, do nothing
-    else if (this.selection.length < 4) {
+    else if (this.submissionSelection.length < 4) {
       word.selected = true;
-      this.selection.push(word);
+      this.submissionSelection.push(word);
     }
   }
 
@@ -71,29 +72,29 @@ export class ConnectionsComponent implements OnInit {
   }
 
   deselectAll(): void {
-    this.selection.forEach(word => word.selected = false);
-    this.selection = [];
+    this.submissionSelection.forEach(word => word.selected = false);
+    this.submissionSelection = [];
   }
 
   submit(): void {
-    if (this.selection.length < 4) return;
+    if (this.submissionSelection.length < 4) return;
 
     // Check if the submitted selection matches any of the previous submissions
     for (const submission of this.submissionHistory) {
-      if (this.selection.every((value, index) => value == submission[index])) {
+      if (this.submissionSelection.every((value, index) => value == submission[index])) {
         this.errorPopup("You've already submitted this selection...");
         return;
       }
     }
 
     // Push submitted selection to submission history
-    this.submissionHistory.push([...this.selection]);
+    this.submissionHistory.push([...this.submissionSelection]);
 
     // Establish category to compare against
-    const category = this.selection[0].category;
+    const category = this.submissionSelection[0].category;
 
     let correctCount = 0;
-    for (const word of this.selection) if (word.category == category) correctCount++;
+    for (const word of this.submissionSelection) if (word.category == category) correctCount++;
 
     if (correctCount < 4) {
       this.submissionMistakesLeft--;
@@ -112,17 +113,17 @@ export class ConnectionsComponent implements OnInit {
     this.words = this.words.filter(word => !word.selected);
 
     // Reset selection
-    this.selection = [];
+    this.submissionSelection = [];
   }
 
   errorPopup(error: string): void {
     this.error = error;
 
-    if (this.showError) clearTimeout(this.errorTimeout);
-    else this.showError = true;
+    if (this.errorIsEnabled) clearTimeout(this.errorTimeout);
+    else this.errorIsEnabled = true;
 
     this.errorTimeout = setTimeout(() => {
-      this.showError = false;
+      this.errorIsEnabled = false;
       this.error = '';
     }, this.errorTimeoutLength);
   }

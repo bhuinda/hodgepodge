@@ -1,45 +1,47 @@
 <div class="connections-container">
-@if (gameOver) {
-  <div class="game-over">
-    You suck! Game over!
-  </div>
-}
 
-@if (!gameOver) {
-
-  @if (showError) {
-    <div class="error-container">
-      <p>{{error}}</p>
+  @if (gameOver) {
+    <div class="game-over">
+      You suck! Game over!
     </div>
   }
 
-  <div class="categories">
-    @for (category of categories; track category.id) {
-      <div class="category" [ngClass]="'cat' + (category.id)">
-        {{category.label}}
-        <br>
-        {{category.words.join(' ')}}
+  @else {
+
+    @if (errorIsEnabled) {
+      <div class="error-container">
+        <p>{{error}}</p>
       </div>
     }
-  </div>
 
-  <div class="word-grid">
-    @for (word of words; track $index) {
-      <button class="word" [ngClass]="{'selected': word.selected}" (click)="select(word)">
-        {{word.label}}
-      </button>
-    }
-  </div>
+    <div class="categories">
+      @for (category of categories; track category.id) {
+        <div class="category" [ngClass]="'cat' + (category.id)">
+          {{category.label}}
+          <br>
+          {{category.words.join(' ')}}
+        </div>
+      }
+    </div>
 
-  <div class="mistakes-container">
-    <p>Mistakes left: {{submissionMistakesLeft}}</p>
-  </div>
+    <div class="word-grid">
+      @for (word of words; track $index) {
+        <button class="word" [ngClass]="{'selected': word.selected}" (click)="select(word)">
+          {{word.label}}
+        </button>
+      }
+    </div>
 
-  <div class="button-container">
-    <button (click)="shuffle()">Shuffle</button>
-    <button (click)="deselectAll()">Deselect all</button>
-    <button (click)="submit()">Submit</button>
-  </div>
+    <div class="mistakes-container">
+      <p>Mistakes left: {{submissionMistakesLeft}}</p>
+    </div>
 
-}
+    <div class="button-container">
+      <button (click)="shuffle()">Shuffle</button>
+      <button (click)="deselectAll()">Deselect all</button>
+      <button (click)="submit()">Submit</button>
+    </div>
+
+  }
+
 </div>
